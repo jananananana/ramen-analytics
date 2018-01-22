@@ -1,22 +1,5 @@
 ﻿# Ramen Analytics
 
-## To View
-- Spin up simple python server with command `python -m SimpleHTTPServer 8000` and go to `http://localhost:8000/`
-- Alternatively, view project at github pages ****TODO: add link when creating gh-pages branch*******
-
-
-## Jana's Notes
-
-- First I begin by setting up my architecture and folder structure.
-- For an simple project such as this, I don't want to overthink it and I keep the architecture simple.
-- Looked up simple ways to turn csv into json, going to use this package probably https://www.npmjs.com/package/ngcsv
-- 
-
-
-
-
-
-
 
 
 ## Project Description
