@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/jananananana/ramen-analytics#readme",
   "dependencies": {
-    "express": "^4.16.2"
+    "csvjson": "^5.0.0",
+    "express": "^4.16.2",
+    "file-system": "^2.2.2"
   }
 }
