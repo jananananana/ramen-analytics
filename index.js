@@ -110,8 +110,12 @@ const getStreaks = function() {
             let day = datesRamenWasConsumed.find(callbackFxToGetDate);
             day.cupsOfRamen++
         }
+        // if the date before has a higher number of cups of ramen, create a new current streak
+        let previousDateHasMoreRamen = (i === 0) || (jsonObj[i].cupsOfRamen < jsonObj[i-1].cupsOfRamen);
+        if (previousDateHasMoreRamen) {
+            console.log("Hey jana")
+        }
         // if the date before has a smaller number of cups of ramen, add to current streak
-        // if the date before has a higher number of cups of ramen, start new streak
         // for the simplicity, even 1 day can be a streak, but this can be adjusted based on the definition of streaks
     }
     console.log(datesRamenWasConsumed);
