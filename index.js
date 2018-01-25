@@ -13,7 +13,7 @@ const options = {
 
 const jsonObj = csvjson.toObject(data, options);
 
-const getMostCommonString = function (arrOfStrings) {
+const getMostCommonString = function(arrOfStrings) {
     if (arrOfStrings.length == 0)
         return null;
 
@@ -36,7 +36,7 @@ const getMostCommonString = function (arrOfStrings) {
         }
         else if (modeMap[el] == maxCount)
         {
-            maxEl += '&' + el;
+            maxEl += ' & ' + el;
             maxCount = modeMap[el];
         }
     }
@@ -53,7 +53,7 @@ const getPeople = function() {
         // Check if the person is on the list
         if (!isPersonInTheList) {
             // Add all unique individuals to the list
-            people.push({name: jsonObj[i].person, cupsOfRamen: 1, ramenType: jsonObj[i]["ramen-type"]});
+            people.push({name: jsonObj[i].person, cupsOfRamen: 1, ramenType: [jsonObj[i]["ramen-type"]]});
         }
         else {
             // Create callback to find the correct person by name
@@ -62,16 +62,16 @@ const getPeople = function() {
             }
             let name = people.find(callbackFxToGetPersonByNameObj);
             // Add an extra cup of ramen to the existing individual
-            name.cupsOfRamen++
-            // Now time to count the favorite ramen
-            // Don't forget to take into account ties
-
-            //console.log(name);
+            name.cupsOfRamen++;
+            name.ramenType.push(jsonObj[i]["ramen-type"]);
         }
 
     }
-    console.log(people);
-}();
+    people.forEach(function(person){
+        person.favoriteRamen = getMostCommonString(person.ramenType);
+    });
+    return Object.assign({}, people);
+};
 
 
 //console.log(jsonObj);
@@ -79,7 +79,7 @@ const getPeople = function() {
 
 // Requests
 app.get('/', (req, res) => res.send('Hello World!'))
-app.get('/all-people', (req, res) => res.send(people))
+app.get('/all-people', (req, res) => res.send(getPeople()))
 app.get('/all-ramen', (req, res) => res.send('Ramen'))
 app.get('/month-days', (req, res) => res.send('Month Days'))
 
