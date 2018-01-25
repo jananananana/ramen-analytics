@@ -23,22 +23,23 @@ const getMostCommonString = function(arrOfStrings) {
 
     for (let i = 0; i < arrOfStrings.length; i++) {
         var el = arrOfStrings[i];
-
+        // Start the counter
         if (modeMap[el] == null)
             modeMap[el] = 1;
+        // Each time the value appears, add to counter
         else
             modeMap[el]++;
-
         if (modeMap[el] > maxCount)
-        {
-            maxEl = el;
-            maxCount = modeMap[el];
-        }
+            {
+                maxEl = el;
+                maxCount = modeMap[el];
+            }
+        // Keep track of possible ties
         else if (modeMap[el] == maxCount)
-        {
-            maxEl += ' & ' + el;
-            maxCount = modeMap[el];
-        }
+            {
+                maxEl += ' & ' + el;
+                maxCount = modeMap[el];
+            }
     }
     return maxEl;
 };
@@ -63,14 +64,16 @@ const getPeople = function() {
             let name = people.find(callbackFxToGetPersonByNameObj);
             // Add an extra cup of ramen to the existing individual
             name.cupsOfRamen++;
+            // Add each ramen type consumed into array
             name.ramenType.push(jsonObj[i]["ramen-type"]);
         }
 
     }
     people.forEach(function(person){
+        // Pass in the array of the types of ramen consumed by each person
         person.favoriteRamen = getMostCommonString(person.ramenType);
     });
-    return Object.assign({}, people);
+    return people;
 };
 
 
@@ -79,7 +82,7 @@ const getPeople = function() {
 
 // Requests
 app.get('/', (req, res) => res.send('Hello World!'))
-app.get('/all-people', (req, res) => res.send(getPeople()))
+app.get('/all-people', (req, res) => res.json(getPeople()))
 app.get('/all-ramen', (req, res) => res.send('Ramen'))
 app.get('/month-days', (req, res) => res.send('Month Days'))
 
