@@ -12,6 +12,7 @@ const options = {
 };
 
 const jsonObj = csvjson.toObject(data, options);
+const ramenDataLength = jsonObj.length;
 
 const getMostCommonString = function(arrOfStrings) {
     if (arrOfStrings.length == 0)
@@ -48,8 +49,7 @@ const getPeople = function() {
 
     let people = [];
 
-    var arrayLength = jsonObj.length;
-    for (let i = 0; i < arrayLength; i++) {
+    for (let i = 0; i < ramenDataLength; i++) {
         let isPersonInTheList = people.filter(person => (person.name === jsonObj[i].person)).length;
         // Check if the person is on the list
         if (!isPersonInTheList) {
@@ -76,14 +76,13 @@ const getPeople = function() {
     return people;
 };
 
-
 //console.log(jsonObj);
 
 
 // Requests
 app.get('/', (req, res) => res.send('Hello World!'))
 app.get('/all-people', (req, res) => res.json(getPeople()))
-app.get('/all-ramen', (req, res) => res.send('Ramen'))
+app.get('/all-ramen', (req, res) => res.json({totalRamenConsumed : ramenDataLength}))
 app.get('/month-days', (req, res) => res.send('Month Days'))
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
