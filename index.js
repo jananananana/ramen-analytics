@@ -14,6 +14,40 @@ const options = {
 const jsonObj = csvjson.toObject(data, options);
 const ramenDataLength = jsonObj.length;
 
+// Create an array of just the dates that ramen was consumed
+// Keeping it simple here
+let datesRamenWasConsumed = [];
+
+const getDatesWhenRamenWasConsumed = function() {
+    for (let i = 0; i < ramenDataLength; i++) {
+        // First, get rid of the time since we're only dealing with days
+        let d = jsonObj[i].date;
+        d = d.split('T')[0];
+        jsonObj[i].shortDate = d;
+
+        // Here we parse out the month as well
+        // This gave me trouble as I ran into some timezone issues with the first month
+        let ramenDate = new Date(jsonObj[i].date);
+
+        let isDateOnTheList = datesRamenWasConsumed.filter(day => (day.shortDate === jsonObj[i].shortDate)).length;
+
+        // Check if the person is on the list
+        if (!isDateOnTheList) {
+            // Add all unique dates to the list
+            // Using getUTCMonth for consistency
+            datesRamenWasConsumed.push({shortDate: jsonObj[i].shortDate, cupsOfRamen: 1, month: ramenDate.getUTCMonth()});
+        }
+        else {
+            // Otherwise increase the amount of ramen that was eaten on that day
+            function callbackFxToGetDate(day) {
+                return day.shortDate === jsonObj[i].shortDate;
+            }
+            let day = datesRamenWasConsumed.find(callbackFxToGetDate);
+            day.cupsOfRamen++
+        }
+    }
+}();
+
 const getMostCommonString = function(arrOfStrings) {
     if (arrOfStrings.length == 0)
         return null;
@@ -80,43 +114,19 @@ const getPeople = function() {
 const getStreaks = function() {
     // Sort the jsonObj by the dates to make it easier to manipulate
     // This also solves the issue of dealing with date formats and sorting those
+
     function custom_sort(a, b) {
         return new Date(a.date).getTime() - new Date(b.date).getTime();
     }
     jsonObj.sort(custom_sort);
 
-    // Create an array of just the dates that ramen was consumed
-    // Keeping it simple here
-    let datesRamenWasConsumed = [];
     let streaks = [];
-
-    for (let i = 0; i < ramenDataLength; i++) {
-        // First, get rid of the time since we're only dealing with days
-        let d = jsonObj[i].date;
-        d = d.split('T')[0];
-        jsonObj[i].shortDate = d;
-
-        let isDateOnTheList = datesRamenWasConsumed.filter(day => (day.shortDate === jsonObj[i].shortDate)).length;
-
-        // Check if the person is on the list
-        if (!isDateOnTheList) {
-            // Add all unique dates to the list
-            datesRamenWasConsumed.push({shortDate: jsonObj[i].shortDate, cupsOfRamen: 1});
-        }
-        else {
-            function callbackFxToGetDate(day) {
-                return day.shortDate === jsonObj[i].shortDate;
-            }
-            let day = datesRamenWasConsumed.find(callbackFxToGetDate);
-            day.cupsOfRamen++
-        }
-    }
     let streakIterator = -1;
+
     for (let i = 0; i < datesRamenWasConsumed.length; i++) {
         // if the date before has a higher number of cups of ramen, create a new current streak
         let previousDateHasMoreRamen = (i === 0) || (datesRamenWasConsumed[i].cupsOfRamen <= datesRamenWasConsumed[i-1].cupsOfRamen);
         if (previousDateHasMoreRamen) {
-            console.log("Hey jana")
             // move the iterator to a new streak
             streakIterator++
             // add the date to the new streak array in streaks
@@ -126,15 +136,16 @@ const getStreaks = function() {
         }
     }
     return streaks;
-}();
-
-//console.log(jsonObj);
-
+};
+ const getMostRamenOnDayInMonth = function() {
+    console.log(datesRamenWasConsumed);
+ }();
 
 // Requests
 app.get('/', (req, res) => res.send('Hello World!'))
 app.get('/all-people', (req, res) => res.json(getPeople()))
 app.get('/all-ramen', (req, res) => res.json({totalRamenConsumed : ramenDataLength}))
-app.get('/month-days', (req, res) => res.send('Month Days'))
+app.get('/streaks', (req, res) => res.json(getStreaks()))
+app.get('/month-days', (req, res) => res.json('Month Days'))
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
