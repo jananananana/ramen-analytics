@@ -33,6 +33,8 @@ const getPeople = function() {
             let name = people.find(callbackFxToGetPersonByNameObj);
             // Add an extra cup of ramen to the existing individual
             name.cupsOfRamen++
+            // Now time to count the favorite ramen
+            // Don't forget to take into account ties
             //console.log(name);
         }
 
