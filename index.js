@@ -36,6 +36,7 @@ const getMostCommonString = function(arrOfStrings) {
                 maxCount = modeMap[el];
             }
         // Keep track of possible ties
+        // Here is where I think this could get a bit more complex if there's a triple tie for example
         else if (modeMap[el] == maxCount)
             {
                 maxEl += ' & ' + el;
@@ -75,6 +76,31 @@ const getPeople = function() {
     });
     return people;
 };
+
+const getStreaks = function() {
+    // Sort the jsonObj by the dates to make it easier to manipulate
+    // I think I'm going to need it sorted for some of the other functions, so I'm sorting it here to start
+    function custom_sort(a, b) {
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+    }
+    jsonObj.sort(custom_sort);
+
+    // Create an array of just the dates that ramen was consumed
+    // Keeping it simple here
+    let datesRamenWasConsumed = [];
+
+
+    for (let i = 0; i < ramenDataLength; i++)
+        // First, get rid of the time since we're only dealing with days
+        let d = jsonObj[i].date;
+        d = d.split('T')[0];
+        jsonObj[i].shortDate = d;
+
+        datesRamenWasConsumed.push(jsonObj[i].shortDate);
+
+    }
+    console.log(jsonObj);
+}();
 
 //console.log(jsonObj);
 
