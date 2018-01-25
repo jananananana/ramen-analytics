@@ -138,14 +138,34 @@ const getStreaks = function() {
     return streaks;
 };
  const getMostRamenOnDayInMonth = function() {
-    console.log(datesRamenWasConsumed);
- }();
+    let monthRamenConsumption = [];
+    const months = [
+        'January', 'February', 'March', 'April', 'May',
+        'June', 'July', 'August', 'September',
+        'October', 'November', 'December'
+    ];
+
+    for (let i = 0; i < 12; i++) {
+        monthRamenConsumption.push({month: i, amountOfRamenConsumedThatDay: 0, dateMostRamenWasConsumed: 0, monthName: months[i]});
+    }
+    for (let i = 0; i < datesRamenWasConsumed.length; i++) {
+        function callbackFxToGetMonth(month) {
+            return month.month === datesRamenWasConsumed[i].month;
+        }
+        let monthForEachRamenDay = monthRamenConsumption.find(callbackFxToGetMonth);
+        if (monthForEachRamenDay.amountOfRamenConsumedThatDay < datesRamenWasConsumed[i].cupsOfRamen) {
+            monthForEachRamenDay.amountOfRamenConsumedThatDay = datesRamenWasConsumed[i].cupsOfRamen;
+            monthForEachRamenDay.dateMostRamenWasConsumed = datesRamenWasConsumed[i].shortDate;
+        }
+    }
+    return monthRamenConsumption;
+ };
 
 // Requests
 app.get('/', (req, res) => res.send('Hello World!'))
 app.get('/all-people', (req, res) => res.json(getPeople()))
 app.get('/all-ramen', (req, res) => res.json({totalRamenConsumed : ramenDataLength}))
 app.get('/streaks', (req, res) => res.json(getStreaks()))
-app.get('/month-days', (req, res) => res.json('Month Days'))
+app.get('/month-days', (req, res) => res.json(getMostRamenOnDayInMonth()))
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))

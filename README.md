@@ -1,10 +1,10 @@
 ﻿# Ramen Analytics
 - To run: `cd` into directory and run: `node index.js`
 - Four paths for the API are:
-  -- http://localhost:3000/all-ramen
-  -- http://localhost:3000/all-people
-  -- http://localhost:3000/streaks
-  -- http://localhost:3000/month-days
+  * http://localhost:3000/all-ramen
+  * http://localhost:3000/all-people
+  * http://localhost:3000/streaks
+  * http://localhost:3000/month-days
 
 - First step is getting the API running. For this I used Express since the routing is set up.
 - Then I set up basic routes to make sure that they're working. 
@@ -13,6 +13,8 @@
 
 - For streaks, each array in streaks array is a seperate streak. It includes the days and the streak.
 - One day "streaks" are included as well.
+
+- For months, years weren't taken into account intentionally. 
 
 
 ## Project Description
