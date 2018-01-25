@@ -79,7 +79,6 @@ const getPeople = function() {
 
 const getStreaks = function() {
     // Sort the jsonObj by the dates to make it easier to manipulate
-    // I think I'm going to need it sorted for some of the other functions, so I'm sorting it here to start
     // This also solves the issue of dealing with date formats and sorting those
     function custom_sort(a, b) {
         return new Date(a.date).getTime() - new Date(b.date).getTime();
@@ -90,6 +89,7 @@ const getStreaks = function() {
     // Keeping it simple here
     let datesRamenWasConsumed = [];
     let streaks = [];
+
     for (let i = 0; i < ramenDataLength; i++) {
         // First, get rid of the time since we're only dealing with days
         let d = jsonObj[i].date;
@@ -110,15 +110,22 @@ const getStreaks = function() {
             let day = datesRamenWasConsumed.find(callbackFxToGetDate);
             day.cupsOfRamen++
         }
+    }
+    let streakIterator = -1;
+    for (let i = 0; i < datesRamenWasConsumed.length; i++) {
         // if the date before has a higher number of cups of ramen, create a new current streak
-        let previousDateHasMoreRamen = (i === 0) || (jsonObj[i].cupsOfRamen < jsonObj[i-1].cupsOfRamen);
+        let previousDateHasMoreRamen = (i === 0) || (datesRamenWasConsumed[i].cupsOfRamen <= datesRamenWasConsumed[i-1].cupsOfRamen);
         if (previousDateHasMoreRamen) {
             console.log("Hey jana")
+            // move the iterator to a new streak
+            streakIterator++
+            // add the date to the new streak array in streaks
+            streaks.push([datesRamenWasConsumed[i]]);
+        } else {
+            streaks[streakIterator].push(datesRamenWasConsumed[i]);
         }
-        // if the date before has a smaller number of cups of ramen, add to current streak
-        // for the simplicity, even 1 day can be a streak, but this can be adjusted based on the definition of streaks
     }
-    console.log(datesRamenWasConsumed);
+    return streaks;
 }();
 
 //console.log(jsonObj);
