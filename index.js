@@ -13,6 +13,36 @@ const options = {
 
 const jsonObj = csvjson.toObject(data, options);
 
+const getMostCommonString = function (arrOfStrings) {
+    if (arrOfStrings.length == 0)
+        return null;
+
+    var modeMap = {},
+        maxEl = arrOfStrings[0],
+        maxCount = 1;
+
+    for (let i = 0; i < arrOfStrings.length; i++) {
+        var el = arrOfStrings[i];
+
+        if (modeMap[el] == null)
+            modeMap[el] = 1;
+        else
+            modeMap[el]++;
+
+        if (modeMap[el] > maxCount)
+        {
+            maxEl = el;
+            maxCount = modeMap[el];
+        }
+        else if (modeMap[el] == maxCount)
+        {
+            maxEl += '&' + el;
+            maxCount = modeMap[el];
+        }
+    }
+    return maxEl;
+};
+
 const getPeople = function() {
 
     let people = [];
@@ -35,6 +65,7 @@ const getPeople = function() {
             name.cupsOfRamen++
             // Now time to count the favorite ramen
             // Don't forget to take into account ties
+
             //console.log(name);
         }
 
