@@ -52,12 +52,12 @@ const getMostCommonString = function(arrOfStrings) {
     if (arrOfStrings.length == 0)
         return null;
 
-    var modeMap = {},
+    let modeMap = {},
         maxEl = arrOfStrings[0],
         maxCount = 1;
 
     for (let i = 0; i < arrOfStrings.length; i++) {
-        var el = arrOfStrings[i];
+        let el = arrOfStrings[i];
         // Start the counter
         if (modeMap[el] == null)
             modeMap[el] = 1;
@@ -162,7 +162,6 @@ const getStreaks = function() {
  };
 
 // Requests
-app.get('/', (req, res) => res.send('Hello World!'))
 app.get('/all-people', (req, res) => res.json(getPeople()))
 app.get('/all-ramen', (req, res) => res.json({totalRamenConsumed : ramenDataLength}))
 app.get('/streaks', (req, res) => res.json(getStreaks()))
