@@ -20,33 +20,34 @@ let datesRamenWasConsumed = [];
 
 const getDatesWhenRamenWasConsumed = function() {
     for (let i = 0; i < ramenDataLength; i++) {
+        let ramenEntry = jsonObj[i];
         // First, get rid of the time since we're only dealing with days
-        let d = jsonObj[i].date;
+        let d = ramenEntry.date;
         d = d.split('T')[0];
-        jsonObj[i].shortDate = d;
+        ramenEntry.shortDate = d;
 
         // Here we parse out the month as well
         // This gave me trouble as I ran into some timezone issues with the first month
-        let ramenDate = new Date(jsonObj[i].date);
+        let ramenDate = new Date(ramenEntry.date);
 
-        let isDateOnTheList = datesRamenWasConsumed.filter(day => (day.shortDate === jsonObj[i].shortDate)).length;
+        let isDateOnTheList = datesRamenWasConsumed.filter(day => (day.shortDate === ramenEntry.shortDate)).length;
 
         // Check if the person is on the list
         if (!isDateOnTheList) {
             // Add all unique dates to the list
             // Using getUTCMonth for consistency
-            datesRamenWasConsumed.push({shortDate: jsonObj[i].shortDate, cupsOfRamen: 1, month: ramenDate.getUTCMonth()});
+            datesRamenWasConsumed.push({shortDate: ramenEntry.shortDate, cupsOfRamen: 1, month: ramenDate.getUTCMonth()});
         }
         else {
             // Otherwise increase the amount of ramen that was eaten on that day
             function callbackFxToGetDate(day) {
-                return day.shortDate === jsonObj[i].shortDate;
+                return day.shortDate === ramenEntry.shortDate;
             }
             let day = datesRamenWasConsumed.find(callbackFxToGetDate);
             day.cupsOfRamen++
         }
     }
-}();
+};
 
 const getMostCommonString = function(arrOfStrings) {
     if (arrOfStrings.length == 0)
@@ -112,6 +113,7 @@ const getPeople = function() {
 };
 
 const getStreaks = function() {
+    getDatesWhenRamenWasConsumed();
     // Sort the jsonObj by the dates to make it easier to manipulate
     // This also solves the issue of dealing with date formats and sorting those
 
@@ -138,6 +140,7 @@ const getStreaks = function() {
     return streaks;
 };
  const getMostRamenOnDayInMonth = function() {
+    getDatesWhenRamenWasConsumed();
     let monthRamenConsumption = [];
     const months = [
         'January', 'February', 'March', 'April', 'May',
@@ -167,4 +170,4 @@ app.get('/all-ramen', (req, res) => res.json({totalRamenConsumed : ramenDataLeng
 app.get('/streaks', (req, res) => res.json(getStreaks()))
 app.get('/month-days', (req, res) => res.json(getMostRamenOnDayInMonth()))
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
+app.listen(3000, () => console.log('Ramen Analytics listening on port 3000!'))
