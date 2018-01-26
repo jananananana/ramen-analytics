@@ -1,5 +1,7 @@
 ﻿# Ramen Analytics
-- To run: `cd` into directory and run: `node index.js`
+- To run: `cd` into directory and run: 
+  * `npm install` 
+  * `node index.js`
 - Four paths for the API are:
   * http://localhost:3000/all-ramen
   * http://localhost:3000/all-people
