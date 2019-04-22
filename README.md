@@ -51,11 +51,6 @@ delicious cup ramen.
 
 ## Requirements
 
-* Create a [Github](https://github.com/) account if you don’t have
-  one. Fork the [Ramen Analytics](https://github.com/SumAll/ramen-analytics)
-  repo and share your fork with `mhova`. Please also add `mhova` as an
-  admin so he can add more team members as reviewers as necessary.
-
 * Tools are up to you. Use whatever language/framework you’re most
   familiar with.
 
